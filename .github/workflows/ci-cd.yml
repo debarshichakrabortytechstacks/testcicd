@@ -34,11 +34,10 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
-    - name: Run Python tests (if available)
-      continue-on-error: true
+    - name: Run Python tests
       run: |
         cd backend
-        python -m pytest || echo "No tests found"
+        python -m unittest test_app.py
 
   frontend-build:
     name: Frontend Build and Test
@@ -61,10 +60,9 @@ jobs:
         npm ci
     
     - name: Run tests
-      continue-on-error: true
       run: |
         cd frontend
-        npm test -- --passWithNoTests
+        CI=true npm test -- --passWithNoTests --watchAll=false
     
     - name: Build frontend
       run: |
